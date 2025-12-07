@@ -171,22 +171,32 @@ game_state = "menu"
 
 # ----------------- Sounds -----------------
 bg_music_path = "bg_music.mp3"
-death_sound_path = "death.wav"
+death_sound_path = "death.mp3"
+game_over_music_path = "gameover.mp3"
+
 bg_music_loaded = False
 death_sound = None
+game_over_sound = None
 
 try:
+    # Background music
     if os.path.exists(bg_music_path):
         pygame.mixer.music.load(bg_music_path)
         pygame.mixer.music.set_volume(0.4)
         bg_music_loaded = True
+
+    # Death sound
     if os.path.exists(death_sound_path):
         death_sound = pygame.mixer.Sound(death_sound_path)
-        death_sound.set_volume(0.6)
+        death_sound.set_volume(0.7)
+
+    # Game Over sound
+    if os.path.exists(game_over_music_path):
+        game_over_sound = pygame.mixer.Sound(game_over_music_path)
+        game_over_sound.set_volume(0.8)
+
 except Exception as e:
     print("Sound load failed:", e)
-    bg_music_loaded = False
-    death_sound = None
 
 # ----------------- Drawing -----------------
 def draw_grid():
@@ -395,12 +405,20 @@ def main():
 
                 if g.row == pacman.row and g.col == pacman.col:
                     lives -= 1
+                    if death_sound:
+                        death_sound.play()
+
                     if lives <= 0:
                         game_state = "game_over"
                         pygame.mixer.music.stop()
-                        try:
-                            if death_sound: death_sound.play()
-                        except: pass
+
+                        # Play game over sound
+                        if game_over_sound:
+                            game_over_sound.play()
+                        else:
+                            if death_sound:
+                                death_sound.play()
+
                     else:
                         pacman = PacMan(1,1)
                         pacman_direction = [0,0]
