@@ -1,4 +1,4 @@
-Pac-Man AI with BFS Ghosts
+Pac-Man AI with BFS Ghosts:
 This is a modern twist on the classic Pac-Man game. Unlike the original, where ghosts follow simple pre-defined patterns, this version uses AI (Breadth-First Search) to make ghosts intelligent and actively chase the player.
 
 Features:
